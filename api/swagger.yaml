@@ -1,0 +1,169 @@
+openapi: 3.0.3
+info:
+  title: Swagger Rest Simple API - OpenAPI 3.0
+  description: |-
+    This is a sample Rest Simple API based on the OpenAPI 3.0 specification. 
+  version: 1.0.0
+externalDocs:
+  description: Find out more about Swagger
+  url: http://swagger.io
+servers:
+  - url: http://127.0.0.1:8080/
+tags:
+  - name: books
+    description: Все книги
+paths:
+  /books/:
+    get:
+      tags:
+        - books
+      summary: Получение всех книг
+      description: Получение всех книг
+      operationId: listBook
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Books'
+        '400':
+          description: Invalid input
+        '422':
+          description: Validation exception
+        
+    post:
+      tags:
+        - books
+      summary: Добавление новой книги
+      description: Добавление новой книги
+      operationId: addBook
+      requestBody:
+        description: Создание новой книги
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Book'
+            example:
+              author: Fluffy
+              title: dog
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Book'
+        '400':
+          description: Invalid input
+        '422':
+          description: Validation exception
+  /books/{id}:
+    put:
+      tags:
+        - books
+      summary: Обновление информации о книге
+      description: Обновление информации о книге
+      operationId: updateBook
+      parameters:
+      - name: id
+        in: path
+        description: Id книги
+        required: true
+        schema:
+          type: string
+      requestBody:
+        description: Update an existent book in the store
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Book'
+            example:
+              author: Fluffy
+              title: dog
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Book'          
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Book'
+        '400':
+          description: Invalid ID supplied
+        '404':
+          description: Book not found
+        '422':
+          description: Validation exception
+    get:
+      tags: 
+        - books
+      summary: Получить книгу
+      description: Получить книгу
+      operationId: getBook
+      parameters:
+      - name: id
+        in: path
+        description: Id книги
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Book'          
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Book'
+        '400':
+          description: Invalid ID supplied
+        '404':
+          description: Book not found
+        '422':
+          description: Validation exception
+    delete:
+      tags:
+        - books
+      summary: Удалить книгу
+      description: Удалить книгу
+      operationId: deleBook
+      parameters:
+      - name: id
+        in: path
+        description: Id книги
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Successful operation
+components:
+  schemas:
+    Book:
+      required:
+        - author
+        - title
+      type: object
+      properties:
+        id:
+          type: string
+          example: 10
+        author:
+          type: string
+          example: doggie
+        title:
+          type: string
+          example: doggie
+      xml:
+        name: book
+    Books:        # <---- dictionary
+      type: object
+      additionalProperties:
+        $ref: '#/components/schemas/Book'

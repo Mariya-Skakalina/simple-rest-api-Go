@@ -25,20 +25,4 @@ func InitDB(cfg config.Config) {
 		log.Fatal("Failed to ping database:", err)
 	}
 	log.Println("Database connected")
-
-	createTable()
-}
-
-func createTable() {
-	createTableSQL := `CREATE TABLE IF NOT EXISTS books (
-        id SERIAL PRIMARY KEY,
-        author VARCHAR(100) NOT NULL,
-        title VARCHAR(300) NOT NULL
-    );`
-
-	_, err := DB.Exec(createTableSQL)
-	if err != nil {
-		log.Fatal("Failed to create table:", err)
-	}
-	log.Println("Table 'books' checked/created")
 }
