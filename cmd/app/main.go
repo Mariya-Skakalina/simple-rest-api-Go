@@ -5,9 +5,11 @@ import (
 
 	"github.com/Mariya-Skakalina/simple-rest-api-Go/internal/config"
 	"github.com/Mariya-Skakalina/simple-rest-api-Go/internal/db"
+	_ "github.com/Mariya-Skakalina/simple-rest-api-Go/internal/migrations"
 	"github.com/Mariya-Skakalina/simple-rest-api-Go/internal/routes"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
+	"github.com/pressly/goose/v3"
 )
 
 func main() {
@@ -28,6 +30,12 @@ func main() {
 	// Инициализация маршрутов
 	routes.InitRoutes(e, db.DB)
 
+	err = goose.Up(db.DB, "./internal/migrations")
+	if err != nil {
+		panic(err)
+	}
+
 	// Запуск сервера
 	e.Logger.Fatal(e.Start(":8080"))
+
 }
